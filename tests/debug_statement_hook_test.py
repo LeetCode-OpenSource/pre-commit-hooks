@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+from __future__ import absolute_import
+from __future__ import unicode_literals
+
 import ast
 
 import pytest
@@ -10,30 +14,36 @@ from testing.util import get_resource_path
 
 @pytest.fixture
 def ast_with_no_debug_imports():
-    return ast.parse("""
+    return ast.parse(
+        """
 import foo
 import bar
 import baz
 from foo import bar
-""")
+""",
+    )
 
 
 @pytest.fixture
 def ast_with_debug_import_form_1():
-    return ast.parse("""
+    return ast.parse(
+        """
 
 import ipdb; ipdb.set_trace()
 
-""")
+""",
+    )
 
 
 @pytest.fixture
 def ast_with_debug_import_form_2():
-    return ast.parse("""
+    return ast.parse(
+        """
 
 from pudb import set_trace; set_trace()
 
-""")
+""",
+    )
 
 
 def test_returns_no_debug_statements(ast_with_no_debug_imports):
@@ -46,7 +56,7 @@ def test_returns_one_form_1(ast_with_debug_import_form_1):
     visitor = ImportStatementParser()
     visitor.visit(ast_with_debug_import_form_1)
     assert visitor.debug_import_statements == [
-        DebugStatement('ipdb', 3, 0)
+        DebugStatement('ipdb', 3, 0),
     ]
 
 
@@ -54,7 +64,7 @@ def test_returns_one_form_2(ast_with_debug_import_form_2):
     visitor = ImportStatementParser()
     visitor.visit(ast_with_debug_import_form_2)
     assert visitor.debug_import_statements == [
-        DebugStatement('pudb', 3, 0)
+        DebugStatement('pudb', 3, 0),
     ]
 
 
@@ -71,3 +81,9 @@ def test_returns_zero_for_passing_file():
 def test_syntaxerror_file():
     ret = debug_statement_hook([get_resource_path('cannot_parse_ast.notpy')])
     assert ret == 1
+
+
+def test_non_utf8_file(tmpdir):
+    f_py = tmpdir.join('f.py')
+    f_py.write_binary('# -*- coding: cp1252 -*-\nx = "€"\n'.encode('cp1252'))
+    assert debug_statement_hook((f_py.strpath,)) == 0

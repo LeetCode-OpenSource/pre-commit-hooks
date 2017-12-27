@@ -4,8 +4,6 @@ import argparse
 import os
 import sys
 
-from pre_commit_hooks.util import cmd_output
-
 
 def _fix_file(filename, is_markdown):
     with open(filename, mode='rb') as file_processed:
@@ -36,7 +34,7 @@ def fix_trailing_whitespace(argv=None):
         const=[],
         default=argparse.SUPPRESS,
         dest='markdown_linebreak_ext',
-        help='Do not preserve linebreak spaces in Markdown'
+        help='Do not preserve linebreak spaces in Markdown',
     )
     parser.add_argument(
         '--markdown-linebreak-ext',
@@ -45,14 +43,10 @@ def fix_trailing_whitespace(argv=None):
         default=['md,markdown'],
         metavar='*|EXT[,EXT,...]',
         nargs='?',
-        help='Markdown extensions (or *) for linebreak spaces'
+        help='Markdown extensions (or *) for linebreak spaces',
     )
     parser.add_argument('filenames', nargs='*', help='Filenames to fix')
     args = parser.parse_args(argv)
-
-    bad_whitespace_files = cmd_output(
-        'grep', '-l', '[[:space:]]$', *args.filenames, retcode=None
-    ).strip().splitlines()
 
     md_args = args.markdown_linebreak_ext
     if '' in md_args:
@@ -69,15 +63,15 @@ def fix_trailing_whitespace(argv=None):
             parser.error(
                 "bad --markdown-linebreak-ext extension '{}' (has . / \\ :)\n"
                 "  (probably filename; use '--markdown-linebreak-ext=EXT')"
-                .format(ext)
+                .format(ext),
             )
 
     return_code = 0
-    for bad_whitespace_file in bad_whitespace_files:
-        _, extension = os.path.splitext(bad_whitespace_file.lower())
+    for filename in args.filenames:
+        _, extension = os.path.splitext(filename.lower())
         md = all_markdown or extension in md_exts
-        if _fix_file(bad_whitespace_file, md):
-            print('Fixing {}'.format(bad_whitespace_file))
+        if _fix_file(filename, md):
+            print('Fixing {}'.format(filename))
             return_code = 1
     return return_code
 

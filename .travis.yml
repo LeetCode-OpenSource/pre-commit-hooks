@@ -8,6 +8,7 @@ matrix:
     -   env: TOXENV=py36
         python: 3.6
     -   env: TOXENV=pypy
+        python: pypy-5.7.1
 install: pip install coveralls tox
 script: tox
 before_install:
@@ -17,5 +18,5 @@ after_success: coveralls
 cache:
     directories:
         - $HOME/.cache/pip
-        - $HOME/.pre-commit
+        - $HOME/.cache/pre-commit
         - /tmp/git-lfs
