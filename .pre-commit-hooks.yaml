@@ -262,3 +262,12 @@
     # for backward compatibility
     files: ''
     minimum_pre_commit_version: 0.15.0
+-   id: lint-staged
+    name: Lint staged files
+    description: This hook will trigger `npm run lint-staged`
+    entry: npm
+    language: system
+    types: [file]
+    # for backward compatibility
+    files: ''
+    args: ['run', 'lint-staged']
