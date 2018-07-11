@@ -30,7 +30,7 @@ class BuiltinTypeVisitor(ast.NodeVisitor):
         return self.allow_dict_kwargs and (getattr(node, 'kwargs', None) or getattr(node, 'keywords', None))
 
     def visit_Call(self, node):
-        if isinstance(node.func, ast.Attribute):
+        if not isinstance(node.func, ast.Name):
             # Ignore functions that are object attributes (`foo.bar()`).
             # Assume that if the user calls `builtins.list()`, they know what
             # they're doing.
@@ -47,7 +47,8 @@ class BuiltinTypeVisitor(ast.NodeVisitor):
 
 
 def check_file_for_builtin_type_constructors(filename, ignore=None, allow_dict_kwargs=True):
-    tree = ast.parse(open(filename, 'rb').read(), filename=filename)
+    with open(filename, 'rb') as f:
+        tree = ast.parse(f.read(), filename=filename)
     visitor = BuiltinTypeVisitor(ignore=ignore, allow_dict_kwargs=allow_dict_kwargs)
     visitor.visit(tree)
     return visitor.builtin_type_calls

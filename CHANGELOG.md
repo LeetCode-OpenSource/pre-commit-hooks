@@ -1,3 +1,71 @@
+1.3.0
+=====
+
+### Features
+- Add an `--unsafe` argument to `check-yaml` to allow custom yaml tags
+    - #273 issue by @blackillzone.
+    - #274 PR by @asottile.
+- Automatically remove `pkg-resources==0.0.0` in `requirements-txt-fixer`
+    - #275 PR by @nvtkaszpir.
+- Detect `breakpoint()` (python3.7+) in `debug-statements` hook.
+    - #283 PR by @asottile.
+- Detect sshcom and putty hooks in `detect-private-key`
+    - #287 PR by @vin01.
+
+### Fixes
+- Open files as UTF-8 (`autopep8-wrapper`, `check-docstring-first`,
+  `double-quote-string-fixer`)
+    - #279 PR by @nvtkaszpir.
+- Fix `AttributeError` in `check-builtin-literals` for some functions
+    - #285 issue by @EgoWumpus.
+    - #286 PR by @asottile.
+
+1.2.3
+=====
+
+### Fixes
+- `trailing-whitespace` entrypoint was incorrect.
+    - f6780b9 by @asottile.
+
+1.2.2
+=====
+
+### Fixes
+- `trailing-whitespace` no longer adds a missing newline at end-of-file
+    - #270 issue by @fractos.
+    - #271 PR by @asottile.
+
+1.2.1-1
+=======
+
+(Note: this is a tag-only release as no code changes occurred)
+
+### Fixes:
+- Don't pass filenames for `no-commit-to-branch`
+    - #268 issue by @dongyuzheng.
+    - #269 PR by @asottile.
+
+1.2.1
+=====
+### Fixes:
+- `detect-aws-credentials` false positive when key was empty
+    - #258 issue by @PVSec.
+    - #260 PR by @PVSec.
+- `no-commit-to-branch` no longer crashes when not on a branch
+    - #265 issue by @hectorv.
+    - #266 PR by @asottile.
+
+1.2.0
+=====
+### Features:
+- Add new `check-builtin-literals` hook.
+    - #249 #251 PR by @benwebber.
+- `pretty-format-json` no longer depends on `simplejson`.
+    - #254 PR by @cas--.
+- `detect-private-key` now detects gcp keys.
+    - #255 issue by @SaMnCo @nicain.
+    - #256 PR by @nicain.
+
 1.1.1
 =====
 ### Fixes:

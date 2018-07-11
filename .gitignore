@@ -2,7 +2,7 @@
 *.iml
 *.py[co]
 .*.sw[a-z]
-.cache
+.pytest_cache
 .coverage
 .idea
 .project
@@ -12,3 +12,5 @@
 /venv*
 coverage-html
 dist
+# SublimeText project/workspace files
+*.sublime-*

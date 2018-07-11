@@ -14,8 +14,8 @@ See also: https://github.com/pre-commit/pre-commit
 
 Add this to your `.pre-commit-config.yaml`
 
-    -   repo: git://github.com/pre-commit/pre-commit-hooks
-        sha: v1.1.1  # Use the ref you want to point at
+    -   repo: https://github.com/pre-commit/pre-commit-hooks
+        rev: v1.3.0  # Use the ref you want to point at
         hooks:
         -   id: trailing-whitespace
         # -   id: ...
@@ -52,7 +52,13 @@ Add this to your `.pre-commit-config.yaml`
 - `check-yaml` - Attempts to load all yaml files to verify syntax.
     - `--allow-multiple-documents` - allow yaml files which use the
       [multi-document syntax](http://www.yaml.org/spec/1.2/spec.html#YAML)
-- `debug-statements` - Check for pdb / ipdb / pudb statements in code.
+    - `--unsafe` - Instead of loading the files, simply parse them for syntax.
+      A syntax-only check enables extensions and unsafe constructs which would
+      otherwise be forbidden.  Using this option removes all guarantees of
+      portability to other yaml implementations.
+      Implies `--allow-multiple-documents`.
+- `debug-statements` - Check for debugger imports and py37+ `breakpoint()`
+  calls in python source.
 - `detect-aws-credentials` - Checks for the existence of AWS secrets that you
   have set up with the AWS CLI.
   The following arguments are available:
@@ -76,7 +82,10 @@ Add this to your `.pre-commit-config.yaml`
 - `name-tests-test` - Assert that files in tests/ end in `_test.py`.
     - Use `args: ['--django']` to match `test*.py` instead.
 - `no-commit-to-branch` - Protect specific branches from direct checkins.
-    - Use `args: -b <branch> ` to set the branch. `master` is the default if no argument is set.
+    - Use `args: [--branch <branch>]` to set the branch. `master` is the
+      default if no argument is set.
+    - `-b` / `--branch` may be specified multiple times to protect multiple
+      branches.
 - `pyflakes` - Run pyflakes on your python files.
 - `pretty-format-json` - Checks that all your JSON files are pretty.  "Pretty"
   here means that keys are sorted and indented.  You can configure this with
@@ -85,7 +94,7 @@ Add this to your `.pre-commit-config.yaml`
     - `--indent ...` - Control the indentation (either a number for a number of spaces or a string of whitespace).  Defaults to 4 spaces.
     - `--no-sort-keys` - when autofixing, retain the original key ordering (instead of sorting the keys)
     - `--top-keys comma,separated,keys` - Keys to keep at the top of mappings.
-- `requirements-txt-fixer` - Sorts entries in requirements.txt
+- `requirements-txt-fixer` - Sorts entries in requirements.txt and removes incorrect entry for `pkg-resources==0.0.0`
 - `sort-simple-yaml` - Sorts simple YAML files which consist only of top-level keys, preserving comments and blocks.
 - `trailing-whitespace` - Trims trailing whitespace.
     - Markdown linebreak trailing spaces preserved for `.md` and`.markdown`;
