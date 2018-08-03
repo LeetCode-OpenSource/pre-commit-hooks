@@ -27,6 +27,7 @@ setup(
         # quickfix to prevent pycodestyle conflicts
         'flake8!=2.5.3',
         'pep8-naming',
+        'flake8-bugbear==18.2.0',
         'autopep8>=1.3',
         'pyyaml',
         'six',
